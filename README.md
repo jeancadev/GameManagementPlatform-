@@ -102,13 +102,13 @@ GET /api/games/{gameId}
 
 ### Historias de Impacto y Logros Técnicos
 
-- **Contenedorización y Arquitectura Limpia:**
+- **Contenedorización y Arquitectura Limpia:
 Implementé una solución basada en Clean Architecture, separando claramente las capas de dominio, aplicación, infraestructura y presentación (Web API), lo que facilita el mantenimiento y la escalabilidad.
 
-- Resolución de Problemas Complejos:**
+- Resolución de Problemas Complejos:
 Durante el desarrollo se solucionaron desafíos como la configuración de migraciones automáticas con EF Core, el seeding de datos para entornos de demo y la integración de autenticación JWT para seguridad.
 
-- **Preparación para Integración Continua:**
+- **Preparación para Integración Continua:
 El proyecto está diseñado para integrarse fácilmente en pipelines de CI/CD (por ejemplo, usando GitHub Actions o Azure DevOps), lo que garantiza despliegues automatizados y pruebas consistentes.
 
 - Buenas Prácticas de Programación:**
