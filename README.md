@@ -1,38 +1,38 @@
 # GameManagementPlatform
 
-**GameManagementPlatform** es una plataforma de gestiÛn diseÒada para administrar partidas multijugador, usuarios, salas de juego y estadÌsticas en tiempo real. El proyecto est· construido sobre **ASP.NET Core** y **Entity Framework Core**, aplicando los principios de **Clean Architecture** y **SOLID**, y siguiendo las mejores pr·cticas de desarrollo de software. Actualmente, el proyecto se encuentra en construcciÛn (alto porcentaje de completado), con algunos problemas conocidos en la interfaz Swagger y con planes de implementar un frontend en el futuro.
+**GameManagementPlatform** es una plataforma de gesti√≥n dise√±ada para administrar partidas multijugador, usuarios, salas de juego y estad√≠sticas en tiempo real. El proyecto est√° construido sobre **ASP.NET Core** y **Entity Framework Core**, aplicando los principios de **Clean Architecture** y **SOLID**, y siguiendo las mejores pr√°cticas de desarrollo de software. Actualmente, el proyecto se encuentra en construcci√≥n (alto porcentaje de completado), con algunos problemas conocidos en la interfaz Swagger y con planes de implementar un frontend en el futuro.
 
-> **Nota:** Este proyecto est· en desarrollo y algunos endpoints pueden presentar problemas en la interfaz de Swagger. Sin embargo, la lÛgica de negocio y la arquitectura est·n completamente implementadas, lo que permite apreciar la calidad del diseÒo y la aplicaciÛn de buenas pr·cticas de programaciÛn.
+> **Nota:** Este proyecto est√° en desarrollo y algunos endpoints pueden presentar problemas en la interfaz de Swagger. Sin embargo, la l√≥gica de negocio y la arquitectura est√°n completamente implementadas, lo que permite apreciar el dise√±o y la aplicaci√≥n de buenas pr√°cticas de programaci√≥n.
 
 ---
 
-## Õndice
+## √çndice
 
 1. [Arquitectura y Diagrama](#arquitectura-y-diagrama)
 2. [Requisitos Previos](#requisitos-previos)
-3. [CÛmo Ejecutar el Proyecto](#cÛmo-ejecutar-el-proyecto)
+3. [C√≥mo Ejecutar el Proyecto](#c√≥mo-ejecutar-el-proyecto)
 4. [Uso de la API y Ejemplos de Endpoints](#uso-de-la-api-y-ejemplos-de-endpoints)
-5. [Historias de Impacto y Logros TÈcnicos](#historias-de-impacto-y-logros-tÈcnicos)
+5. [Historias de Impacto y Logros T√©cnicos](#historias-de-impacto-y-logros-t√©cnicos)
 6. [Posibles Mejoras Futuras](#posibles-mejoras-futuras)
-7. [CrÈditos / Referencias](#crÈditos--referencias)
+7. [Cr√©ditos / Referencias](#cr√©ditos--referencias)
 8. [Contacto](#contacto)
 
 ---
 
 ## Arquitectura y Diagrama
 
-El proyecto se organiza en varias capas siguiendo el patrÛn **Clean Architecture**:
+El proyecto se organiza en varias capas siguiendo el patr√≥n **Clean Architecture**:
 
-- **Domain:** Contiene las entidades y la lÛgica de negocio.  
-- **Application:** Define casos de uso, DTOs, interfaces de repositorio y orquesta la comunicaciÛn entre capas.  
-- **Infrastructure:** Implementa el acceso a datos a travÈs de Entity Framework Core, migraciones y repositorios concretos.  
-- **WebAPI:** Expone los endpoints REST y se encarga de la presentaciÛn de la API.
+- **Domain:** Contiene las entidades y la l√≥gica de negocio.  
+- **Application:** Define casos de uso, DTOs, interfaces de repositorio y orquesta la comunicaci√≥n entre capas.  
+- **Infrastructure:** Implementa el acceso a datos a trav√©s de Entity Framework Core, migraciones y repositorios concretos.  
+- **WebAPI:** Expone los endpoints REST y se encarga de la presentaci√≥n de la API.
 
-La arquitectura tambiÈn contempla el uso de autenticaciÛn JWT para un acceso seguro y un mecanismo de seeding que garantiza datos de ejemplo consistentes para demostraciones.
+La arquitectura tambi√©n contempla el uso de autenticaci√≥n JWT para un acceso seguro y un mecanismo de seeding que garantiza datos de ejemplo consistentes para demostraciones.
 
 ![Arquitectura del Proyecto](./docs/architecture.png)
 
-*El diagrama muestra la Web API (ASP.NET Core / EF Core) y su conexiÛn a la base de datos (SQL Server 2019), adem·s de la divisiÛn interna en capas (Domain, Application, Infrastructure).*
+*El diagrama muestra la Web API (ASP.NET Core / EF Core) y su conexi√≥n a la base de datos (SQL Server 2019), adem√°s de la divisi√≥n interna en capas (Domain, Application, Infrastructure).*
 
 ---
 
@@ -45,9 +45,9 @@ La arquitectura tambiÈn contempla el uso de autenticaciÛn JWT para un acceso seg
 
 ---
 
-## CÛmo Ejecutar el Proyecto
+## C√≥mo Ejecutar el Proyecto
 
-### EjecuciÛn Local
+### Ejecuci√≥n Local
 
 1. **Clona el repositorio:**
    ```bash
@@ -86,44 +86,44 @@ Crear un usuario:
 
 POST /api/users
 
-Obtener informaciÛn de un usuario:
+Obtener informaci√≥n de un usuario:
 
 GET /api/users/{userId}
 
-Obtener informaciÛn de una sala de juego:
+Obtener informaci√≥n de una sala de juego:
 
 GET /api/rooms/{roomId}
 
-Obtener informaciÛn de una partida:
+Obtener informaci√≥n de una partida:
 
 GET /api/games/{gameId}
 
 ---
 
-### Historias de Impacto y Logros TÈcnicos
+### Historias de Impacto y Logros T√©cnicos
 
-- **ContenedorizaciÛn y Arquitectura Limpia:**
-ImplementÈ una soluciÛn basada en Clean Architecture, separando claramente las capas de dominio, aplicaciÛn, infraestructura y presentaciÛn (Web API), lo que facilita el mantenimiento y la escalabilidad.
+- **Contenedorizaci√≥n y Arquitectura Limpia:**
+Implement√© una soluci√≥n basada en Clean Architecture, separando claramente las capas de dominio, aplicaci√≥n, infraestructura y presentaci√≥n (Web API), lo que facilita el mantenimiento y la escalabilidad.
 
-- ResoluciÛn de Problemas Complejos:**
-Durante el desarrollo se solucionaron desafÌos como la configuraciÛn de migraciones autom·ticas con EF Core, el seeding de datos para entornos de demo y la integraciÛn de autenticaciÛn JWT para seguridad.
+- Resoluci√≥n de Problemas Complejos:**
+Durante el desarrollo se solucionaron desaf√≠os como la configuraci√≥n de migraciones autom√°ticas con EF Core, el seeding de datos para entornos de demo y la integraci√≥n de autenticaci√≥n JWT para seguridad.
 
-- **PreparaciÛn para IntegraciÛn Continua:**
-El proyecto est· diseÒado para integrarse f·cilmente en pipelines de CI/CD (por ejemplo, usando GitHub Actions o Azure DevOps), lo que garantiza despliegues automatizados y pruebas consistentes.
+- **Preparaci√≥n para Integraci√≥n Continua:**
+El proyecto est√° dise√±ado para integrarse f√°cilmente en pipelines de CI/CD (por ejemplo, usando GitHub Actions o Azure DevOps), lo que garantiza despliegues automatizados y pruebas consistentes.
 
-- Buenas Pr·cticas de ProgramaciÛn:**
-Se aplicaron principios SOLID y patrones de diseÒo para lograr un cÛdigo limpio, modular y testeable, lo que es fundamental en entornos de desarrollo a gran escala.
+- Buenas Pr√°cticas de Programaci√≥n:**
+Se aplicaron principios SOLID y patrones de dise√±o para lograr un c√≥digo limpio, modular y testeable, lo que es fundamental en entornos de desarrollo a gran escala.
 
 ### Posibles Mejoras Futuras
 
-- **ImplementaciÛn de Frontend:**
+- **Implementaci√≥n de Frontend:**
 - **Persistencia de Datos:**
-- **OptimizaciÛn de Rendimiento:**
-- **AutomatizaciÛn CI/CD:**
+- **Optimizaci√≥n de Rendimiento:**
+- **Automatizaci√≥n CI/CD:**
 
 ---
 
-### CrÈditos / Referencias
+### Cr√©ditos / Referencias
 
 - **ASP.NET Core:** https://docs.microsoft.com/en-us/aspnet/core/
 - **Entity Framework Core:** https://docs.microsoft.com/en-us/ef/core/
@@ -135,4 +135,4 @@ Se aplicaron principios SOLID y patrones de diseÒo para lograr un cÛdigo limpio,
 
 ### Contacto
 
-Para m·s informaciÛn o colaboraciÛn, puedes contactarme en jean.obandocortes@gmail.com
+Para m√°s informaci√≥n o colaboraci√≥n, puedes contactarme en jean.obandocortes@gmail.com
