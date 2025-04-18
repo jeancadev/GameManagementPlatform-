@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using GameManagement.Application.Interfaces;
 using GameManagement.Application.DTOs;
 using GameManagement.Application.DTOs.Moderation;
+using Microsoft.Extensions.Logging;
 
 namespace GameManagement.API.Controllers
 {
@@ -82,6 +83,45 @@ namespace GameManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener la actividad de la sala");
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        [HttpPost("rooms/{roomId}/kick")]
+        [Authorize(Roles = "Owner,Moderator")]
+        public async Task<IActionResult> KickPlayer(Guid roomId, [FromBody] KickPlayerRequest request)
+        {
+            try
+            {
+                var moderatorId = Guid.Parse(User.FindFirst("sub")?.Value!);
+                var logEntry = await _moderationService.KickPlayerAsync(
+                    roomId,
+                    moderatorId,
+                    request.PlayerId,
+                    request.Reason
+                );
+
+                return Ok(new { message = "Jugador expulsado con éxito" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al expulsar al jugador");
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        [HttpGet("users/{userId}/activity")]
+        [Authorize(Roles = "Owner,Moderator")]
+        public async Task<IActionResult> GetUserActivity(Guid userId)
+        {
+            try
+            {
+                var activity = await _moderationService.GetUserActivityAsync(userId);
+                return Ok(activity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener la actividad del usuario");
                 return StatusCode(500, "Error interno del servidor");
             }
         }

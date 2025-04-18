@@ -94,8 +94,10 @@ namespace GameManagement.Application.Services
 
         private string GenerateJwtToken(User user)
         {
+            _logger.LogDebug("Generando token JWT para el usuario: {Username}", user.Username);
+            
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
+            var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -105,14 +107,22 @@ namespace GameManagement.Application.Services
                     new Claim(ClaimTypes.Name, user.Username),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes),
+                Issuer = _jwtSettings.Issuer,
+                Audience = _jwtSettings.Audience,
+                NotBefore = DateTime.UtcNow,
+                IssuedAt = DateTime.UtcNow,
+                Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var tokenString = tokenHandler.WriteToken(token);
+            
+            _logger.LogDebug("Token JWT generado: {Token}", tokenString);
+            
+            return tokenString;
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

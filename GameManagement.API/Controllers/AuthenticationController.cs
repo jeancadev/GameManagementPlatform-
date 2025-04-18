@@ -6,6 +6,8 @@ using GameManagement.Application.Common;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.Extensions.Options;
+using GameManagement.Application.Configuration;
 
 namespace GameManagement.API.Controllers
 {
@@ -16,13 +18,16 @@ namespace GameManagement.API.Controllers
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly ILogger<AuthenticationController> _logger;
+        private readonly JwtSettings _jwtSettings;
 
         public AuthenticationController(
             IAuthenticationService authenticationService,
-            ILogger<AuthenticationController> logger)
+            ILogger<AuthenticationController> logger,
+            IOptions<JwtSettings> jwtSettings)
         {
             _authenticationService = authenticationService;
             _logger = logger;
+            _jwtSettings = jwtSettings.Value;
         }
 
         [HttpPost("register")]
@@ -101,6 +106,10 @@ namespace GameManagement.API.Controllers
                 {
                     return Unauthorized(ApiResponse<object>.ErrorResponse(result.Message));
                 }
+
+                // Añadir token a las cabeceras de respuesta
+                Response.Headers.Add("X-Token-Expiry",
+                    DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes).ToString("O"));
 
                 return Ok(ApiResponse<AuthenticationResponse>.SuccessResponse(
                     result, "Autenticación exitosa"));

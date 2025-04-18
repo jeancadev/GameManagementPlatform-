@@ -19,6 +19,7 @@ using GameManagement.Application.Interfaces;
 using GameManagement.Application.Services;
 using GameManagement.Infrastructure.Data;
 using System.Text.Json.Serialization;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,7 @@ builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 builder.Logging.AddEventSourceLogger();
 
-// Configurar nivel de logging seg˙n el ambiente
+// Configurar nivel de logging seg√∫n el ambiente
 if (builder.Environment.IsDevelopment())
 {
     builder.Logging.SetMinimumLevel(LogLevel.Debug);
@@ -38,7 +39,7 @@ else
     builder.Logging.SetMinimumLevel(LogLevel.Information);
 }
 
-// Agregar configuraciÛn de DbContext
+// Agregar configuraci√≥n de DbContext
 builder.Services.AddDbContext<GameManagementDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
@@ -66,7 +67,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<RegistrationRequestValidator>();
 
-// Agregar servicios de aplicaciÛn
+// Agregar servicios de aplicaci√≥n
 builder.Services.AddScoped<IRealtimeNotificationService, SignalRNotificationService>();
 builder.Services.AddScoped<IModerationRepository, ModerationRepository>();
 builder.Services.AddScoped<IModerationService, ModerationService>();
@@ -74,7 +75,7 @@ builder.Services.AddScoped<IModerationService, ModerationService>();
 // Registrar servicios de infraestructura
 GameManagement.Infrastructure.DependencyInjection.AddInfrastructureServices(builder.Services, builder.Configuration);
 
-// Agregar servicios de la aplicaciÛn
+// Agregar servicios de la aplicaci√≥n
 builder.Services.AddApplicationServices(builder.Configuration);
 
 // Configurar Swagger/OpenAPI
@@ -85,7 +86,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Game Management Platform API",
         Version = "v1",
-        Description = "API para la gestiÛn de partidas multijugador",
+        Description = "API para la gesti√≥n de partidas multijugador",
         Contact = new OpenApiContact
         {
             Name = "Nombre",
@@ -93,7 +94,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // Configurar la autenticaciÛn JWT en Swagger
+    // Configurar la autenticaci√≥n JWT en Swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme.\r\n\r\n" +
@@ -123,49 +124,120 @@ builder.Services.AddSwaggerGen(options =>
 
     // Solucionar problemas de ciclos en los modelos
     options.CustomSchemaIds(type => type.FullName);
-
-    // Para documentaciÛn XML, descomentar y configurar
-    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    // options.IncludeXmlComments(xmlPath);
 });
 
-// ConfiguraciÛn de autenticaciÛn JWT
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+// Configurar opciones de JWT
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+builder.Services.AddSingleton(jwtSettings);
+
+if (jwtSettings == null)
+{
+    throw new InvalidOperationException("La secci√≥n JwtSettings no est√° configurada correctamente.");
+}
+
+var keyBytes = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        var secretKey = builder.Configuration["JwtSettings:SecretKey"];
-        if (string.IsNullOrEmpty(secretKey))
-        {
-            throw new InvalidOperationException("SecretKey no est· configurado en JwtSettings.");
-        }
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+        ValidateIssuer = true,
+        ValidIssuer = jwtSettings.Issuer,
+        ValidateAudience = true,
+        ValidAudience = jwtSettings.Audience,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
 
-        options.TokenValidationParameters = new TokenValidationParameters
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-        };
+            var logger = context.HttpContext.RequestServices
+                .GetRequiredService<ILogger<Program>>();
 
-        // Agregar logging para debugging
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
+            // Extraer el token de "Authorization" y eliminar el prefijo "Bearer "
+            var authorization = context.Request.Headers["Authorization"].FirstOrDefault();
+            if (!string.IsNullOrEmpty(authorization) &&
+                authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
             {
-                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                logger.LogInformation("Token recibido: {Token}", context.Token);
-                return Task.CompletedTask;
-            },
-            OnAuthenticationFailed = context =>
-            {
-                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                logger.LogError("Error de autenticaciÛn: {Error}", context.Exception.Message);
-                return Task.CompletedTask;
+                var token = authorization.Substring("Bearer ".Length).Trim();
+                context.Token = token;
+                logger.LogDebug("Token recibido y procesado: {Token}", token);
             }
-        };
-    });
+            else
+            {
+                logger.LogWarning("Token recibido con formato incorrecto: {Token}", authorization);
+            }
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            var logger = context.HttpContext.RequestServices
+                .GetRequiredService<ILogger<Program>>();
+
+            // Registrar el error completo para depuraci√≥n
+            logger.LogError("Error de autenticaci√≥n detallado: {Error}\nStackTrace: {StackTrace}", 
+                context.Exception.Message, 
+                context.Exception.StackTrace);
+
+            // Intentar depurar el token
+            try 
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var token = context.Request.Headers["Authorization"]
+                    .FirstOrDefault()?.Split(" ").Last();
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    // Intentar leer el token sin validaci√≥n para diagnosticar
+                    logger.LogInformation("Intentando depurar token...");
+                    if (handler.CanReadToken(token)) 
+                    {
+                        var jwtToken = handler.ReadJwtToken(token);
+                        logger.LogInformation("Token le√≠do correctamente. Header: {Header}, Payload: {Payload}", 
+                            jwtToken.Header.SerializeToJson(), 
+                            jwtToken.Payload.SerializeToJson());
+                    }
+                    else 
+                    {
+                        logger.LogError("No se puede leer el token proporcionado");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Error al depurar token: {Error}", ex.Message);
+            }
+
+            logger.LogError("Error de autenticaci√≥n: {Error}", context.Exception.Message);
+            if (context.Exception is SecurityTokenExpiredException)
+            {
+                context.Response.Headers["Token-Expired"] = "true";
+            }
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            var logger = context.HttpContext.RequestServices
+                .GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("Token validado exitosamente para el usuario: {User}",
+                context.Principal?.Identity?.Name);
+            return Task.CompletedTask;
+        }
+    };
+
+});
+
 
 // Configurar Rate Limiting
 builder.Services.AddRateLimiter(options =>
@@ -200,12 +272,10 @@ var app = builder.Build();
 // Configurar el pipeline de HTTP request
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage(); // Habilita la p·gina de errores detallados en desarrollo
+    app.UseDeveloperExceptionPage(); // Habilita la p√°gina de errores detallados en desarrollo
 
     // Configurar Swagger
-    app.UseSwagger(c => {
-        c.RouteTemplate = "swagger/{documentName}/swagger.json";
-    });
+    app.UseSwagger();
     app.UseSwaggerUI(c => {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Game Management Platform API v1");
         c.RoutePrefix = "swagger";
@@ -213,6 +283,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();  // Habilitar archivos est√°ticos
 
 // Habilitar CORS
 app.UseCors("AllowAll");
@@ -233,12 +304,13 @@ app.UseExceptionHandler(errorApp =>
 
         await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
         {
-            error = "Ha ocurrido un error interno. Por favor, intÈntelo m·s tarde."
+            error = "Ha ocurrido un error interno. Por favor, int√©ntelo m√°s tarde."
         }));
     });
 });
 
-// Agregar autenticaciÛn y autorizaciÛn al pipeline
+app.UseRouting();
+// Agregar autenticaci√≥n y autorizaci√≥n al pipeline
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -246,5 +318,17 @@ app.UseRateLimiter();
 
 app.MapHub<GameHub>("/gamehub");
 app.MapControllers();
+
+// Imprimir las URLs en la consola para referencia
+var urls = app.Urls.ToList();
+if (urls.Any())
+{
+    Console.WriteLine("La aplicaci√≥n est√° disponible en las siguientes URLs:");
+    foreach (var url in urls)
+    {
+        Console.WriteLine($"- {url}");
+        Console.WriteLine($"- {url}/swagger");
+    }
+}
 
 app.Run();
