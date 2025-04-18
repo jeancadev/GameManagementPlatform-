@@ -332,4 +332,4 @@ Para más información, consultas técnicas o colaboración profesional, puede c
 
 - **Email:** jean.obandocortes@gmail.com
 - **LinkedIn:** https://www.linkedin.com/in/jeancarlosobando/
-- **GitHub:** [https://github.com/jeancadev]
+- **GitHub:** https://github.com/jeancadev
