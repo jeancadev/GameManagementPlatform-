@@ -1,12 +1,19 @@
 # GameManagementPlatform
 
+<<<<<<< HEAD
 **GameManagementPlatform** es una plataforma robusta de gestión diseñada para administrar partidas multijugador, usuarios, salas de juego y estadísticas en tiempo real. El proyecto está construido sobre **ASP.NET Core 8.0** y **Entity Framework Core**, implementando rigurosamente los principios de **Clean Architecture** y **SOLID**, y siguiendo las mejores prácticas de desarrollo de software empresarial. La plataforma ofrece una API RESTful completa con autenticación JWT, documentación interactiva mediante Swagger y comunicación en tiempo real a través de SignalR.
+=======
+**GameManagementPlatform** es una plataforma de gestión diseñada para administrar partidas multijugador, usuarios, salas de juego y estadísticas en tiempo real. El proyecto está construido sobre **ASP.NET Core** y **Entity Framework Core**, aplicando los principios de **Clean Architecture** y **SOLID**, y siguiendo las mejores prácticas de desarrollo de software. Actualmente, el proyecto se encuentra en construcción (alto porcentaje de completado), con algunos problemas conocidos en la interfaz Swagger y con planes de implementar un frontend en el futuro.
+
+> **Nota:** Este proyecto está en desarrollo y algunos endpoints pueden presentar problemas en la interfaz de Swagger. Sin embargo, la lógica de negocio y la arquitectura están completamente implementadas, lo que permite apreciar el diseño y la aplicación de buenas prácticas de programación.
+>>>>>>> f6876d23b36eb3969fd9be85bb4c78deec17aece
 
 ---
 
 ## Índice
 
 1. [Arquitectura y Diagrama](#arquitectura-y-diagrama)
+<<<<<<< HEAD
 2. [Características Principales](#características-principales)
 3. [Tecnologías Utilizadas](#tecnologías-utilizadas)
 4. [Requisitos Previos](#requisitos-previos)
@@ -17,11 +24,21 @@
 9. [Posibles Mejoras Futuras](#posibles-mejoras-futuras)
 10. [Créditos / Referencias](#créditos--referencias)
 11. [Contacto](#contacto)
+=======
+2. [Requisitos Previos](#requisitos-previos)
+3. [Cómo Ejecutar el Proyecto](#cómo-ejecutar-el-proyecto)
+4. [Uso de la API y Ejemplos de Endpoints](#uso-de-la-api-y-ejemplos-de-endpoints)
+5. [Historias de Impacto y Logros Técnicos](#historias-de-impacto-y-logros-técnicos)
+6. [Posibles Mejoras Futuras](#posibles-mejoras-futuras)
+7. [Créditos / Referencias](#créditos--referencias)
+8. [Contacto](#contacto)
+>>>>>>> f6876d23b36eb3969fd9be85bb4c78deec17aece
 
 ---
 
 ## Arquitectura y Diagrama
 
+<<<<<<< HEAD
 El proyecto implementa rigurosamente el patrón **Clean Architecture**, organizándose en capas claramente definidas y con responsabilidades específicas:
 
 - **Domain Layer:** Contiene las entidades fundamentales del negocio (User, Game, Room, etc.), reglas de negocio, enumeraciones, excepciones y contratos de dominio. Esta capa no tiene dependencias externas.
@@ -82,6 +99,20 @@ Esta arquitectura garantiza alta cohesión, bajo acoplamiento, testabilidad y fa
   
 - **Infraestructura:**
   - Capacidad para despliegue en contenedores Docker
+=======
+El proyecto se organiza en varias capas siguiendo el patrón **Clean Architecture**:
+
+- **Domain:** Contiene las entidades y la lógica de negocio.  
+- **Application:** Define casos de uso, DTOs, interfaces de repositorio y orquesta la comunicación entre capas.  
+- **Infrastructure:** Implementa el acceso a datos a través de Entity Framework Core, migraciones y repositorios concretos.  
+- **WebAPI:** Expone los endpoints REST y se encarga de la presentación de la API.
+
+La arquitectura también contempla el uso de autenticación JWT para un acceso seguro y un mecanismo de seeding que garantiza datos de ejemplo consistentes para demostraciones.
+
+![Arquitectura del Proyecto](./docs/architecture.png)
+
+*El diagrama muestra la Web API (ASP.NET Core / EF Core) y su conexión a la base de datos (SQL Server 2019), además de la división interna en capas (Domain, Application, Infrastructure).*
+>>>>>>> f6876d23b36eb3969fd9be85bb4c78deec17aece
 
 ---
 
@@ -96,7 +127,11 @@ Esta arquitectura garantiza alta cohesión, bajo acoplamiento, testabilidad y fa
 
 ## Cómo Ejecutar el Proyecto
 
+<<<<<<< HEAD
 ### Configuración Local
+=======
+### Ejecución Local
+>>>>>>> f6876d23b36eb3969fd9be85bb4c78deec17aece
 
 1. **Clonar el repositorio:**
    ```bash
@@ -213,8 +248,25 @@ Content-Type: application/json
 }
 ```
 
+<<<<<<< HEAD
 **Obtener detalles de una partida:**
 ```http
+=======
+Crear un usuario:
+
+POST /api/users
+
+Obtener información de un usuario:
+
+GET /api/users/{userId}
+
+Obtener información de una sala de juego:
+
+GET /api/rooms/{roomId}
+
+Obtener información de una partida:
+
+>>>>>>> f6876d23b36eb3969fd9be85bb4c78deec17aece
 GET /api/games/{gameId}
 Authorization: Bearer [token]
 ```
@@ -250,6 +302,7 @@ Authorization: Bearer [token]
 
 ---
 
+<<<<<<< HEAD
 ## Autenticación y Seguridad
 
 La plataforma implementa un sistema de autenticación robusto basado en JWT (JSON Web Tokens):
@@ -269,6 +322,32 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ---
 
 ## Historias de Impacto y Logros Técnicos
+=======
+### Historias de Impacto y Logros Técnicos
+
+- **Contenedorización y Arquitectura Limpia:**
+Implementé una solución basada en Clean Architecture, separando claramente las capas de dominio, aplicación, infraestructura y presentación (Web API), lo que facilita el mantenimiento y la escalabilidad.
+
+- **Resolución de Problemas Complejos:**
+Durante el desarrollo se solucionaron desafíos como la configuración de migraciones automáticas con EF Core, el seeding de datos para entornos de demo y la integración de autenticación JWT para seguridad.
+
+- **Preparación para Integración Continua:**
+El proyecto está diseñado para integrarse fácilmente en pipelines de CI/CD (por ejemplo, usando GitHub Actions o Azure DevOps), lo que garantiza despliegues automatizados y pruebas consistentes.
+
+- **Buenas Prácticas de Programación:**
+Se aplicaron principios SOLID y patrones de diseño para lograr un código limpio, modular y testeable, lo que es fundamental en entornos de desarrollo a gran escala.
+
+### Posibles Mejoras Futuras
+
+- **Implementación de Frontend:**
+- **Persistencia de Datos:**
+- **Optimización de Rendimiento:**
+- **Automatización CI/CD:**
+
+---
+
+### Créditos / Referencias
+>>>>>>> f6876d23b36eb3969fd9be85bb4c78deec17aece
 
 ### Arquitectura Limpia y Escalable
 La implementación rigurosa de Clean Architecture ha creado un sistema modular donde cada componente tiene una responsabilidad claramente definida. Esta separación permite escalar horizontalmente partes específicas del sistema según las necesidades, facilitando actualizaciones y mantenimiento.
@@ -328,8 +407,12 @@ Evolución hacia una arquitectura de microservicios para componentes específico
 
 ## Contacto
 
+<<<<<<< HEAD
 Para más información, consultas técnicas o colaboración profesional, puede contactarme en:
 
 - **Email:** jean.obandocortes@gmail.com
 - **LinkedIn:** https://www.linkedin.com/in/jeancarlosobando/
 - **GitHub:** [https://github.com/jeancadev]
+=======
+Para más información o colaboración, puedes contactarme en jean.obandocortes@gmail.com
+>>>>>>> f6876d23b36eb3969fd9be85bb4c78deec17aece
