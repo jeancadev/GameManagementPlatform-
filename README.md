@@ -34,7 +34,7 @@ El proyecto implementa rigurosamente el patrón **Clean Architecture**, organiz�
 
 Esta arquitectura garantiza alta cohesión, bajo acoplamiento, testabilidad y facilidad de mantenimiento.
 
-![Arquitectura del Proyecto](./docs/architecture.png)
+![Arquitectura del Proyecto](./docs/clean-architecture-diagram.svg)
 
 *El diagrama ilustra la Web API (ASP.NET Core / EF Core) y su conexión a la base de datos (SQL Server), destacando la clara separación entre capas conforme a los principios de Clean Architecture.*
 
@@ -128,13 +128,37 @@ Esta arquitectura garantiza alta cohesión, bajo acoplamiento, testabilidad y fa
 
 1. **Construir la imagen Docker:**
    ```bash
-   docker build -t gamemanagement:latest .
+   docker build -t gamemanagement-api:latest .
    ```
 
-2. **Ejecutar el contenedor:**
+2. **Ejecutar el contenedor (solo API):**
    ```bash
-   docker run -p 5000:80 -p 5001:443 gamemanagement:latest
+   docker run -p 5000:80 -p 5001:443 gamemanagement-api:latest
    ```
+
+3. **O ejecutar usando Docker Compose (incluye SQL Server):**
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **Verificar que los contenedores estén funcionando:**
+   ```bash
+   docker ps
+   ```
+
+5. **Para detener los contenedores:**
+   ```bash
+   docker-compose down
+   ```
+
+6. **Usando los scripts de automatización:**
+   - En Windows: ejecutar `build-and-run.bat`
+   - En Linux/Mac: ejecutar `./build-and-run.sh` (puede requerir permisos `chmod +x build-and-run.sh`)
+
+La aplicación estará disponible en:
+- http://localhost:5000
+- https://localhost:5001
+- Swagger UI: http://localhost:5000/swagger
 
 ---
 

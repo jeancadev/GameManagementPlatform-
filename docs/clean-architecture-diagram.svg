@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Clean Architecture Diagram -->
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f8f9fa" />
+  
+  <!-- Domain Layer (Core) -->
+  <circle cx="400" cy="300" r="100" fill="#d7e3fc" stroke="#3d5a80" stroke-width="2" />
+  <text x="400" y="290" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Domain Layer</text>
+  <text x="400" y="320" font-family="Arial" font-size="14" text-anchor="middle">User, Game, Room</text>
+  <text x="400" y="340" font-family="Arial" font-size="14" text-anchor="middle">Business Rules</text>
+  
+  <!-- Application Layer -->
+  <circle cx="400" cy="300" r="180" fill="#98c1d9" fill-opacity="0.6" stroke="#3d5a80" stroke-width="2" />
+  <text x="400" y="160" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Application Layer</text>
+  <text x="400" y="180" font-family="Arial" font-size="14" text-anchor="middle">Services, DTOs</text>
+  <text x="400" y="200" font-family="Arial" font-size="14" text-anchor="middle">Interfaces, Use Cases</text>
+  
+  <!-- Infrastructure Layer -->
+  <circle cx="400" cy="300" r="260" fill="#e0fbfc" fill-opacity="0.5" stroke="#3d5a80" stroke-width="2" />
+  <text x="400" y="70" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Infrastructure Layer</text>
+  <text x="400" y="90" font-family="Arial" font-size="14" text-anchor="middle">EF Core, Repositories</text>
+  <text x="400" y="110" font-family="Arial" font-size="14" text-anchor="middle">Data Access, Migrations</text>
+  
+  <!-- API Layer -->
+  <circle cx="400" cy="300" r="330" fill="#bee3db" fill-opacity="0.4" stroke="#3d5a80" stroke-width="2" />
+  <text x="400" y="580" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">API Layer</text>
+  <text x="400" y="530" font-family="Arial" font-size="14" text-anchor="middle">Controllers, Swagger</text>
+  <text x="400" y="550" font-family="Arial" font-size="14" text-anchor="middle">JWT Authentication</text>
+  
+  <!-- External Systems -->
+  <rect x="600" y="120" width="120" height="60" rx="10" ry="10" fill="#ffd166" stroke="#3d5a80" stroke-width="2" />
+  <text x="660" y="155" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">SQL Server</text>
+  
+  <rect x="600" y="200" width="120" height="60" rx="10" ry="10" fill="#06d6a0" stroke="#3d5a80" stroke-width="2" />
+  <text x="660" y="235" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">SignalR</text>
+  
+  <rect x="600" y="280" width="120" height="60" rx="10" ry="10" fill="#ef476f" stroke="#3d5a80" stroke-width="2" />
+  <text x="660" y="315" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">JWT Auth</text>
+  
+  <rect x="600" y="360" width="120" height="60" rx="10" ry="10" fill="#118ab2" stroke="#3d5a80" stroke-width="2" />
+  <text x="660" y="395" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">Swagger</text>
+  
+  <!-- Arrows -->
+  <line x1="480" y1="130" x2="595" y2="150" stroke="#3d5a80" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="480" y1="210" x2="595" y2="230" stroke="#3d5a80" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="480" y1="290" x2="595" y2="310" stroke="#3d5a80" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="480" y1="370" x2="595" y2="390" stroke="#3d5a80" stroke-width="2" marker-end="url(#arrow)" />
+  
+  <!-- Arrow Marker -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#3d5a80" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial" font-size="22" text-anchor="middle" font-weight="bold">Game Management Platform - Clean Architecture</text>
+</svg> 
