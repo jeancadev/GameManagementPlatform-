@@ -39,15 +39,29 @@ else
     builder.Logging.SetMinimumLevel(LogLevel.Information);
 }
 
-// Agregar configuración de DbContext
+// Agregar configuración de DbContext con resiliencia para errores transitorios
 builder.Services.AddDbContext<GameManagementDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+            sqlOptions.CommandTimeout(30);
+        }
     ));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+            sqlOptions.CommandTimeout(30);
+        }
     ));
 
 // Configurar controladores con opciones para manejar referencias circulares
@@ -268,6 +282,69 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Aplicar migraciones automáticamente al iniciar la aplicación
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("Intentando aplicar migraciones de base de datos...");
+        
+        var gameDbContext = services.GetRequiredService<GameManagementDbContext>();
+        gameDbContext.Database.Migrate();
+        
+        var appDbContext = services.GetRequiredService<ApplicationDbContext>();
+        appDbContext.Database.Migrate();
+        
+        // Sembrar usuario de prueba si no existe
+        var authService = services.GetRequiredService<GameManagement.Application.Interfaces.IAuthenticationService>();
+        if (await SeedTestUserAsync(services, logger))
+        {
+            logger.LogInformation("Usuario de prueba creado exitosamente");
+        }
+        
+        logger.LogInformation("Migraciones aplicadas exitosamente");
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Error al aplicar migraciones de base de datos");
+    }
+}
+
+// Método para sembrar usuario de prueba
+async Task<bool> SeedTestUserAsync(IServiceProvider services, ILogger logger)
+{
+    try
+    {
+        var userRepository = services.GetRequiredService<GameManagement.Domain.Interfaces.IUserRepository>();
+        var testUser = await userRepository.GetByUsernameAsync("testuser");
+        
+        if (testUser == null)
+        {
+            logger.LogInformation("Creando usuario de prueba: testuser");
+            
+            var authService = services.GetRequiredService<GameManagement.Application.Interfaces.IAuthenticationService>();
+            var result = await authService.RegisterAsync(new GameManagement.Application.DTOs.RegistrationRequest
+            {
+                Username = "testuser",
+                Email = "testuser@example.com",
+                Password = "Test123!"
+            });
+            
+            return result.Success;
+        }
+        
+        return true; // El usuario ya existe
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Error al crear usuario de prueba");
+        return false;
+    }
+}
 
 // Configurar el pipeline de HTTP request
 if (app.Environment.IsDevelopment())
