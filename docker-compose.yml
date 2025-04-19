@@ -3,6 +3,7 @@ version: '3.8'
 services:
   gamemanagement-api:
     image: gamemanagement-api
+    container_name: gamemanagement-api
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,14 +12,17 @@ services:
       - "5001:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=sql-server;Database=GameManagementDB;User=sa;Password=Strong_Password123!;TrustServerCertificate=True;
-    depends_on:
-      - sql-server
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     networks:
       - gamemanagement-network
 
   sql-server:
     image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: gamemanagement-sqlserver
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Strong_Password123!

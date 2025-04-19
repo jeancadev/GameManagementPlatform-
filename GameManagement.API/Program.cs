@@ -273,14 +273,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage(); // Habilita la página de errores detallados en desarrollo
-
-    // Configurar Swagger
-    app.UseSwagger();
-    app.UseSwaggerUI(c => {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Game Management Platform API v1");
-        c.RoutePrefix = "swagger";
-    });
 }
+
+// Configurar Swagger (disponible en todos los entornos)
+app.UseSwagger();
+app.UseSwaggerUI(c => {
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Game Management Platform API v1");
+    c.RoutePrefix = "swagger";
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();  // Habilitar archivos estáticos
