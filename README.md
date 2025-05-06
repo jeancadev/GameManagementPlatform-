@@ -1,174 +1,174 @@
 # GameManagementPlatform
 
-**GameManagementPlatform** es una plataforma robusta de gestión diseñada para administrar partidas multijugador, usuarios, salas de juego y estadísticas en tiempo real. El proyecto está construido sobre **ASP.NET Core 8.0** y **Entity Framework Core**, implementando rigurosamente los principios de **Clean Architecture** y **SOLID**, y siguiendo las mejores prácticas de desarrollo de software empresarial. La plataforma ofrece una API RESTful completa con autenticación JWT, documentación interactiva mediante Swagger y comunicación en tiempo real a través de SignalR.
+**GameManagementPlatform** is a robust management platform designed to administer multiplayer games, users, game rooms, and real-time statistics. The project is built on **ASP.NET Core 8.0** and **Entity Framework Core**, rigorously implementing the principles of **Clean Architecture** and **SOLID**, and following best practices for enterprise software development. The platform offers a complete RESTful API with JWT authentication, interactive documentation via Swagger, and real-time communication through SignalR.
 
 ---
 
-## Índice
+## Table of Contents
 
-1. [Arquitectura y Diagrama](#arquitectura-y-diagrama)
-2. [Características Principales](#características-principales)
-3. [Tecnologías Utilizadas](#tecnologías-utilizadas)
-4. [Requisitos Previos](#requisitos-previos)
-5. [Cómo Ejecutar el Proyecto](#cómo-ejecutar-el-proyecto)
-6. [Uso de la API y Ejemplos de Endpoints](#uso-de-la-api-y-ejemplos-de-endpoints)
-7. [Autenticación y Seguridad](#autenticación-y-seguridad)
-8. [Historias de Impacto y Logros Técnicos](#historias-de-impacto-y-logros-técnicos)
-9. [Posibles Mejoras Futuras](#posibles-mejoras-futuras)
-10. [Créditos / Referencias](#créditos--referencias)
-11. [Contacto](#contacto)
-
----
-
-## Arquitectura y Diagrama
-
-El proyecto implementa rigurosamente el patrón **Clean Architecture**, organizándose en capas claramente definidas y con responsabilidades específicas:
-
-- **Domain Layer:** Contiene las entidades fundamentales del negocio (User, Game, Room, etc.), reglas de negocio, enumeraciones, excepciones y contratos de dominio. Esta capa no tiene dependencias externas.
-
-- **Application Layer:** Orquesta los flujos de aplicación a través de servicios, implementa casos de uso, define DTOs, interfaces de repositorio y servicios de infraestructura. Contiene toda la lógica de aplicación y actúa como mediador entre la capa de presentación y la de dominio.
-
-- **Infrastructure Layer:** Proporciona implementaciones concretas de las interfaces definidas en la capa de aplicación. Incluye acceso a datos a través de Entity Framework Core, migraciones, configuraciones, repositorios, servicios externos y manejo de transacciones.
-
-- **WebAPI Layer:** Expone la funcionalidad de la aplicación a través de endpoints RESTful. Se encarga de la configuración de middleware, autenticación JWT, Swagger, validación de solicitudes y serialización de respuestas.
-
-Esta arquitectura garantiza alta cohesión, bajo acoplamiento, testabilidad y facilidad de mantenimiento.
-
-![Arquitectura del Proyecto](./docs/clean-architecture-diagram.svg)
-
-*El diagrama ilustra la Web API (ASP.NET Core / EF Core) y su conexión a la base de datos (SQL Server), destacando la clara separación entre capas conforme a los principios de Clean Architecture.*
+1. [Architecture and Diagram](#architecture-and-diagram)
+2. [Main Features](#main-features)
+3. [Technologies Used](#technologies-used)
+4. [Prerequisites](#prerequisites)
+5. [How to Run the Project](#how-to-run-the-project)
+6. [API Usage and Endpoint Examples](#api-usage-and-endpoint-examples)
+7. [Authentication and Security](#authentication-and-security)
+8. [Impact Stories and Technical Achievements](#impact-stories-and-technical-achievements)
+9. [Potential Future Improvements](#potential-future-improvements)
+10. [Credits / References](#credits--references)
+11. [Contact](#contact)
 
 ---
 
-## Características Principales
+## Architecture and Diagram
 
-- **Gestión Completa de Usuarios:** Registro, autenticación, perfiles y roles.
-- **Sistema de Salas:** Creación, configuración y gestión de salas de juego.
-- **Administración de Partidas:** Creación, seguimiento y finalización de partidas.
-- **Estadísticas en Tiempo Real:** Seguimiento de métricas y eventos de juego.
-- **Comunicación en Tiempo Real:** Implementación de SignalR para notificaciones.
-- **Seguridad Robusta:** Autenticación JWT, validación de tokens y protección de endpoints.
-- **API Documentada:** Interfaz Swagger completa con ejemplos y descripciones.
-- **Logging Detallado:** Sistema de registro para depuración y auditoría.
-- **Control de Transacciones:** Manejo consistente de operaciones en la base de datos.
-- **Seeding de Datos:** Datos iniciales para desarrollo y demostración.
-- **Rate Limiting:** Protección contra abuso de la API.
+The project rigorously implements the **Clean Architecture** pattern, organizing into clearly defined layers with specific responsibilities:
+
+- **Domain Layer:** Contains the fundamental business entities (User, Game, Room, etc.), business rules, enumerations, exceptions, and domain contracts. This layer has no external dependencies.
+
+- **Application Layer:** Orchestrates application flows through services, implements use cases, defines DTOs, repository interfaces, and infrastructure services. It contains all application logic and acts as a mediator between the presentation and domain layers.
+
+- **Infrastructure Layer:** Provides concrete implementations of the interfaces defined in the application layer. Includes data access via Entity Framework Core, migrations, configurations, repositories, external services, and transaction management.
+
+- **WebAPI Layer:** Exposes the application's functionality through RESTful endpoints. It handles middleware configuration, JWT authentication, Swagger, request validation, and response serialization.
+
+This architecture ensures high cohesion, low coupling, testability, and ease of maintenance.
+
+![Project Architecture](./docs/clean-architecture-diagram.svg)
+
+*The diagram illustrates the Web API (ASP.NET Core / EF Core) and its connection to the database (SQL Server), highlighting the clear separation between layers according to Clean Architecture principles.*
 
 ---
 
-## Tecnologías Utilizadas
+## Main Features
+
+- **Complete User Management:** Registration, authentication, profiles, and roles.
+- **Room System:** Creation, configuration, and management of game rooms.
+- **Game Management:** Creation, tracking, and completion of games.
+- **Real-Time Statistics:** Tracking of metrics and game events.
+- **Real-Time Communication:** Implementation of SignalR for notifications.
+- **Robust Security:** JWT authentication, token validation, and endpoint protection.
+- **Documented API:** Complete Swagger interface with examples and descriptions.
+- **Detailed Logging:** Logging system for debugging and auditing.
+- **Transaction Control:** Consistent handling of database operations.
+- **Data Seeding:** Initial data for development and demonstration.
+- **Rate Limiting:** Protection against API abuse.
+
+---
+
+## Technologies Used
 
 - **Backend:**
   - ASP.NET Core 8.0
   - Entity Framework Core 8.0
   - SQL Server
-  - SignalR para comunicación en tiempo real
+  - SignalR for real-time communication
   
-- **Seguridad:**
+- **Security:**
   - JWT (JSON Web Tokens)
   - HTTPS
-  - Validación de solicitudes con FluentValidation
+  - Request validation with FluentValidation
   
-- **Documentación API:**
+- **API Documentation:**
   - Swagger/OpenAPI
   
-- **Patrones y Prácticas:**
+- **Patterns and Practices:**
   - Clean Architecture
   - SOLID
   - Repository Pattern
   - Dependency Injection
   - Unit of Work
-  - CQRS (parcialmente implementado)
+  - CQRS (partially implemented)
   
-- **Infraestructura:**
-  - Capacidad para despliegue en contenedores Docker
+- **Infrastructure:**
+  - Capability for deployment in Docker containers
 
 ---
 
-## Requisitos Previos
+## Prerequisites
 
-- **.NET SDK 8.0** o superior
-- **Visual Studio 2022** (Community Edition es suficiente) o **VS Code** con extensiones C#
-- **SQL Server** (para ejecutar la base de datos localmente)
-- **Git** para control de versiones
+- **.NET SDK 8.0** or higher
+- **Visual Studio 2022** (Community Edition is sufficient) or **VS Code** with C# extensions
+- **SQL Server** (to run the database locally)
+- **Git** for version control
 
 ---
 
-## Cómo Ejecutar el Proyecto
+## How to Run the Project
 
-### Configuración Local
+### Local Setup
 
-1. **Clonar el repositorio:**
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/jeancadev/GameManagementPlatform.git
    cd GameManagementPlatform
    ```
 
-2. **Restaurar paquetes NuGet:**
+2. **Restore NuGet packages:**
    ```bash
    dotnet restore
    ```
 
-3. **Configurar la base de datos:**
-   - Actualiza la cadena de conexión en `appsettings.json` según tu entorno
-   - Ejecuta las migraciones para crear la base de datos:
+3. **Configure the database:**
+   - Update the connection string in `appsettings.json` according to your environment
+   - Run migrations to create the database:
    ```bash
    dotnet ef database update --project GameManagement.Infrastructure --startup-project GameManagement.API
    ```
 
-4. **Ejecutar la aplicación:**
+4. **Run the application:**
    ```bash
    dotnet run --project GameManagement.API
    ```
 
-5. **Acceder a la documentación de la API:**
-   - Abre tu navegador y visita: `https://localhost:5001/swagger`
+5. **Access the API documentation:**
+   - Open your browser and visit: `https://localhost:5001/swagger`
 
-### Usando Docker (Opcional)
+### Using Docker (Optional)
 
-1. **Construir la imagen Docker:**
+1. **Build the Docker image:**
    ```bash
    docker build -t gamemanagement-api:latest .
    ```
 
-2. **Ejecutar el contenedor (solo API):**
+2. **Run the container (API only):**
    ```bash
    docker run -p 5000:80 -p 5001:443 gamemanagement-api:latest
    ```
 
-3. **O ejecutar usando Docker Compose (incluye SQL Server):**
+3. **Or run using Docker Compose (includes SQL Server):**
    ```bash
    docker-compose up -d
    ```
 
-4. **Verificar que los contenedores estén funcionando:**
+4. **Verify that the containers are running:**
    ```bash
    docker ps
    ```
 
-5. **Para detener los contenedores:**
+5. **To stop the containers:**
    ```bash
    docker-compose down
    ```
 
-6. **Usando los scripts de automatización:**
-   - En Windows: ejecutar `build-and-run.bat`
-   - En Linux/Mac: ejecutar `./build-and-run.sh` (puede requerir permisos `chmod +x build-and-run.sh`)
+6. **Using automation scripts:**
+   - On Windows: run `build-and-run.bat`
+   - On Linux/Mac: run `./build-and-run.sh` (may require `chmod +x build-and-run.sh` permissions)
 
-La aplicación estará disponible en:
+The application will be available at:
 - http://localhost:5000
 - https://localhost:5001
 - Swagger UI: http://localhost:5000/swagger
 
 ---
 
-## Uso de la API y Ejemplos de Endpoints
+## API Usage and Endpoint Examples
 
-La API ofrece una amplia gama de endpoints para gestionar todas las entidades del sistema. A continuación se presentan ejemplos de las operaciones más comunes:
+The API offers a wide range of endpoints to manage all system entities. Below are examples of the most common operations:
 
-### Autenticación
+### Authentication
 
-**Registro de usuario:**
+**User Registration:**
 ```http
 POST /api/authentication/register
 Content-Type: application/json
@@ -180,7 +180,7 @@ Content-Type: application/json
 }
 ```
 
-**Inicio de sesión:**
+**Login:**
 ```http
 POST /api/authentication/login
 Content-Type: application/json
@@ -191,37 +191,37 @@ Content-Type: application/json
 }
 ```
 
-### Gestión de Salas
+### Room Management
 
-**Crear una sala de juego:**
+**Create a game room:**
 ```http
 POST /api/rooms
 Authorization: Bearer [token]
 Content-Type: application/json
 
 {
-  "name": "Sala de Estrategia",
-  "description": "Sala para juegos de estrategia",
+  "name": "Strategy Room",
+  "description": "Room for strategy games",
   "maxPlayers": 4,
   "isPrivate": false
 }
 ```
 
-**Unirse a una sala:**
+**Join a room:**
 ```http
 POST /api/rooms/{roomId}/join
 Authorization: Bearer [token]
 ```
 
-**Listar salas disponibles:**
+**List available rooms:**
 ```http
 GET /api/rooms
 Authorization: Bearer [token]
 ```
 
-### Gestión de Partidas
+### Game Management
 
-**Iniciar una partida:**
+**Start a game:**
 ```http
 POST /api/games
 Authorization: Bearer [token]
@@ -237,13 +237,13 @@ Content-Type: application/json
 }
 ```
 
-**Obtener detalles de una partida:**
+**Get game details:**
 ```http
 GET /api/games/{gameId}
 Authorization: Bearer [token]
 ```
 
-**Finalizar una partida:**
+**End a game:**
 ```http
 POST /api/games/{gameId}/end
 Authorization: Bearer [token]
@@ -258,15 +258,15 @@ Content-Type: application/json
 }
 ```
 
-### Estadísticas y Perfiles
+### Statistics and Profiles
 
-**Obtener perfil de usuario:**
+**Get user profile:**
 ```http
 GET /api/users/{userId}/profile
 Authorization: Bearer [token]
 ```
 
-**Obtener estadísticas de juego:**
+**Get game statistics:**
 ```http
 GET /api/statistics/user/{userId}
 Authorization: Bearer [token]
@@ -274,71 +274,71 @@ Authorization: Bearer [token]
 
 ---
 
-## Autenticación y Seguridad
+## Authentication and Security
 
-La plataforma implementa un sistema de autenticación robusto basado en JWT (JSON Web Tokens):
+The platform implements a robust authentication system based on JWT (JSON Web Tokens):
 
-- **Generación segura de tokens:** Los tokens se generan utilizando algoritmos criptográficos seguros (HMAC SHA-256).
-- **Claims personalizados:** Cada token incluye información sobre el usuario (ID, nombre de usuario) y metadatos de seguridad.
-- **Validación completa:** Se valida el emisor, audiencia, firma y tiempo de expiración.
-- **Renovación de tokens:** Implementación de mecanismos para actualizar tokens expirados sin requerir nueva autenticación.
-- **Protección de endpoints:** Todos los endpoints sensibles están protegidos mediante políticas de autorización.
-- **Almacenamiento seguro de contraseñas:** Las contraseñas se almacenan como hashes utilizando algoritmos seguros (HMACSHA512).
+- **Secure token generation:** Tokens are generated using secure cryptographic algorithms (HMAC SHA-256).
+- **Custom claims:** Each token includes user information (ID, username) and security metadata.
+- **Full validation:** Issuer, audience, signature, and expiration time are validated.
+- **Token renewal:** Mechanisms are implemented to update expired tokens without requiring re-authentication.
+- **Endpoint protection:** All sensitive endpoints are protected using authorization policies.
+- **Secure password storage:** Passwords are stored as hashes using secure algorithms (HMACSHA512).
 
-Para utilizar un endpoint protegido, incluye el token en el encabezado de autorización:
+To use a protected endpoint, include the token in the authorization header:
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ---
 
-## Historias de Impacto y Logros Técnicos
+## Impact Stories and Technical Achievements
 
-### Arquitectura Limpia y Escalable
-La implementación rigurosa de Clean Architecture ha creado un sistema modular donde cada componente tiene una responsabilidad claramente definida. Esta separación permite escalar horizontalmente partes específicas del sistema según las necesidades, facilitando actualizaciones y mantenimiento.
+### Clean and Scalable Architecture
+The rigorous implementation of Clean Architecture has created a modular system where each component has a clearly defined responsibility. This separation allows for horizontal scaling of specific parts of the system as needed, facilitating updates and maintenance.
 
-### Optimización de Rendimiento
-La plataforma implementa estrategias avanzadas para optimizar el rendimiento, incluyendo:
-- Implementación eficiente de consultas a la base de datos
-- Patrones de diseño para reducir carga en el servidor
-- Uso de caché donde es apropiado
-- Paginación y filtrado para conjuntos de datos grandes
+### Performance Optimization
+The platform implements advanced strategies to optimize performance, including:
+- Efficient database query implementation
+- Design patterns to reduce server load
+- Use of cache where appropriate
+- Pagination and filtering for large datasets
 
-### Integración de Autenticación JWT Robusta
-El sistema implementa un mecanismo de autenticación seguro utilizando JWT, permitiendo la protección de endpoints críticos mientras mantiene la escalabilidad. La implementación incluye manejo de errores detallado, registro de eventos de seguridad y configuración flexible.
+### Integration of Robust JWT Authentication
+The system implements a secure authentication mechanism using JWT, allowing the protection of critical endpoints while maintaining scalability. The implementation includes detailed error handling, security event logging, and flexible configuration.
 
-### Patrones de Diseño Avanzados
-Se han aplicado múltiples patrones de diseño y arquitectónicos para resolver problemas específicos:
-- Repository Pattern para abstraer el acceso a datos
-- Mediator Pattern para desacoplar componentes
-- Factory Pattern para la creación de entidades complejas
-- Unit of Work para garantizar transacciones atómicas
-
----
-
-## Posibles Mejoras Futuras
-
-### Frontend Interactivo
-Desarrollo de una interfaz de usuario moderna utilizando frameworks como React, Angular o Vue.js, que consuma la API RESTful existente e implemente comunicación en tiempo real mediante SignalR.
-
-### Escalabilidad Horizontal
-Preparación de la infraestructura para soportar despliegue en múltiples instancias, implementando caching distribuido y sesiones compartidas.
-
-### Analytics y Telemetría
-Integración de herramientas de análisis para monitorear el rendimiento de la aplicación, comportamiento de usuarios y métricas de negocio.
-
-### Implementación de Tests Automatizados
-Expansión de la cobertura de pruebas con:
-- Pruebas unitarias para lógica de negocio
-- Pruebas de integración para flujos completos
-- Pruebas de rendimiento para endpoints críticos
-
-### Microservicios
-Evolución hacia una arquitectura de microservicios para componentes específicos que requieran escalabilidad independiente.
+### Advanced Design Patterns
+Multiple design and architectural patterns have been applied to solve specific problems:
+- Repository Pattern to abstract data access
+- Mediator Pattern to decouple components
+- Factory Pattern for creating complex entities
+- Unit of Work to ensure atomic transactions
 
 ---
 
-## Créditos / Referencias
+## Potential Future Improvements
+
+### Interactive Frontend
+Development of a modern user interface using frameworks like React, Angular, or Vue.js, which consumes the existing RESTful API and implements real-time communication via SignalR.
+
+### Horizontal Scalability
+Preparing the infrastructure to support deployment across multiple instances, implementing distributed caching and shared sessions.
+
+### Analytics and Telemetry
+Integration of analysis tools to monitor application performance, user behavior, and business metrics.
+
+### Implementation of Automated Tests
+Expansion of test coverage with:
+- Unit tests for business logic
+- Integration tests for complete flows
+- Performance tests for critical endpoints
+
+### Microservices
+Evolution towards a microservices architecture for specific components requiring independent scalability.
+
+---
+
+## Credits / References
 
 - **ASP.NET Core Documentation:** https://docs.microsoft.com/en-us/aspnet/core/
 - **Entity Framework Core Documentation:** https://docs.microsoft.com/en-us/ef/core/
@@ -350,9 +350,9 @@ Evolución hacia una arquitectura de microservicios para componentes específico
 
 ---
 
-## Contacto
+## Contact
 
-Para más información, consultas técnicas o colaboración profesional, puede contactarme en:
+For more information, technical inquiries, or professional collaboration, you can contact me at:
 
 - **Email:** jean.obandocortes@gmail.com
 - **LinkedIn:** https://www.linkedin.com/in/jeancarlosobando/
